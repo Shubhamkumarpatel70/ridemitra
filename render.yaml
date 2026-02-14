@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ride-mitra-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://ride-mitra-backend.onrender.com
+

@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Modern Ride Booking Platform Colors */
+  --primary: #000000;
+  --primary-light: #1a1a1a;
+  --secondary: #F5F5F5;
+  --accent: #00D4AA;
+  --accent-hover: #00B894;
+  --accent-secondary: #FF6B35;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --text-primary: #000000;
+  --text-secondary: #6B7280;
+  --text-light: #FFFFFF;
+  --border: #E5E7EB;
+  --surface: #FFFFFF;
+  --surface-dark: #1F2937;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--secondary);
+  color: var(--text-primary);
+}
+
