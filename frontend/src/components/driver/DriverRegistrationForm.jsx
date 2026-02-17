@@ -60,6 +60,40 @@ const DriverRegistrationForm = () => {
   }
 
   const nextStep = () => {
+    // Validate required image for current step before proceeding
+    let requiredImage = null
+    let imageName = ''
+    
+    switch (currentStep) {
+      case 1:
+        requiredImage = images.profileImage
+        imageName = 'Profile Image'
+        break
+      case 2:
+        requiredImage = images.vehicleImage
+        imageName = 'Vehicle Image'
+        break
+      case 3:
+        requiredImage = images.aadharImage
+        imageName = 'Aadhar Card Image'
+        break
+      case 4:
+        requiredImage = images.panImage
+        imageName = 'PAN Card Image'
+        break
+      default:
+        break
+    }
+    
+    // Check if image is required and not uploaded
+    if (requiredImage === null && currentStep < 5) {
+      setError(`Please upload ${imageName} before proceeding to the next step.`)
+      return
+    }
+    
+    // Clear error if validation passes
+    setError('')
+    
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
     }
@@ -75,6 +109,19 @@ const DriverRegistrationForm = () => {
     e.preventDefault()
     setError('')
     setLoading(true)
+
+    // Validate all required images are uploaded
+    const missingImages = []
+    if (!images.profileImage) missingImages.push('Profile Image')
+    if (!images.vehicleImage) missingImages.push('Vehicle Image')
+    if (!images.aadharImage) missingImages.push('Aadhar Card Image')
+    if (!images.panImage) missingImages.push('PAN Card Image')
+
+    if (missingImages.length > 0) {
+      setError(`Please upload all required images: ${missingImages.join(', ')}`)
+      setLoading(false)
+      return
+    }
 
     try {
       const formDataToSend = new FormData()
@@ -93,11 +140,11 @@ const DriverRegistrationForm = () => {
         formDataToSend.append(key, value)
       })
 
-      // Add images
-      if (images.profileImage) formDataToSend.append('profileImage', images.profileImage)
-      if (images.vehicleImage) formDataToSend.append('vehicleImage', images.vehicleImage)
-      if (images.aadharImage) formDataToSend.append('aadharImage', images.aadharImage)
-      if (images.panImage) formDataToSend.append('panImage', images.panImage)
+      // Add images (all are required at this point)
+      formDataToSend.append('profileImage', images.profileImage)
+      formDataToSend.append('vehicleImage', images.vehicleImage)
+      formDataToSend.append('aadharImage', images.aadharImage)
+      formDataToSend.append('panImage', images.panImage)
 
       await axios.post('/api/driver/register-details', formDataToSend, {
         headers: {
@@ -136,10 +183,12 @@ const DriverRegistrationForm = () => {
             <div>
               <label className="block text-sm font-medium text-text-primary mb-2">
                 <FaCamera className="inline mr-2 text-accent" />
-                Profile Image
+                Profile Image <span className="text-danger">*</span>
               </label>
               <div className="flex items-center space-x-4">
-                <div className="w-32 h-32 border-2 border-dashed border-border rounded-button flex items-center justify-center overflow-hidden">
+                <div className={`w-32 h-32 border-2 border-dashed rounded-button flex items-center justify-center overflow-hidden ${
+                  images.profileImage ? 'border-success' : 'border-danger'
+                }`}>
                   {imagePreviews.profileImage ? (
                     <img src={imagePreviews.profileImage} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
@@ -150,16 +199,23 @@ const DriverRegistrationForm = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => handleImageChange(e, 'profileImage')}
+                    onChange={(e) => {
+                      handleImageChange(e, 'profileImage')
+                      setError('') // Clear error when image is uploaded
+                    }}
                     className="hidden"
                     id="profileImage"
+                    required
                   />
                   <label
                     htmlFor="profileImage"
                     className="px-4 py-2 bg-accent text-text-light rounded-button font-semibold hover:bg-accent-hover cursor-pointer inline-block"
                   >
-                    Upload Image
+                    {images.profileImage ? 'Change Image' : 'Upload Image'}
                   </label>
+                  {!images.profileImage && (
+                    <p className="text-sm text-danger mt-2">Required: Please upload your profile image</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -211,10 +267,12 @@ const DriverRegistrationForm = () => {
             <div>
               <label className="block text-sm font-medium text-text-primary mb-2">
                 <FaCamera className="inline mr-2 text-accent" />
-                Vehicle Image
+                Vehicle Image <span className="text-danger">*</span>
               </label>
               <div className="flex items-center space-x-4">
-                <div className="w-32 h-32 border-2 border-dashed border-border rounded-button flex items-center justify-center overflow-hidden">
+                <div className={`w-32 h-32 border-2 border-dashed rounded-button flex items-center justify-center overflow-hidden ${
+                  images.vehicleImage ? 'border-success' : 'border-danger'
+                }`}>
                   {imagePreviews.vehicleImage ? (
                     <img src={imagePreviews.vehicleImage} alt="Vehicle" className="w-full h-full object-cover" />
                   ) : (
@@ -225,16 +283,23 @@ const DriverRegistrationForm = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => handleImageChange(e, 'vehicleImage')}
+                    onChange={(e) => {
+                      handleImageChange(e, 'vehicleImage')
+                      setError('') // Clear error when image is uploaded
+                    }}
                     className="hidden"
                     id="vehicleImage"
+                    required
                   />
                   <label
                     htmlFor="vehicleImage"
                     className="px-4 py-2 bg-accent text-text-light rounded-button font-semibold hover:bg-accent-hover cursor-pointer inline-block"
                   >
-                    Upload Image
+                    {images.vehicleImage ? 'Change Image' : 'Upload Image'}
                   </label>
+                  {!images.vehicleImage && (
+                    <p className="text-sm text-danger mt-2">Required: Please upload your vehicle image</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -281,10 +346,12 @@ const DriverRegistrationForm = () => {
             <div>
               <label className="block text-sm font-medium text-text-primary mb-2">
                 <FaCamera className="inline mr-2 text-accent" />
-                Aadhar Card Image
+                Aadhar Card Image <span className="text-danger">*</span>
               </label>
               <div className="flex items-center space-x-4">
-                <div className="w-32 h-32 border-2 border-dashed border-border rounded-button flex items-center justify-center overflow-hidden">
+                <div className={`w-32 h-32 border-2 border-dashed rounded-button flex items-center justify-center overflow-hidden ${
+                  images.aadharImage ? 'border-success' : 'border-danger'
+                }`}>
                   {imagePreviews.aadharImage ? (
                     <img src={imagePreviews.aadharImage} alt="Aadhar" className="w-full h-full object-cover" />
                   ) : (
@@ -295,16 +362,23 @@ const DriverRegistrationForm = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => handleImageChange(e, 'aadharImage')}
+                    onChange={(e) => {
+                      handleImageChange(e, 'aadharImage')
+                      setError('') // Clear error when image is uploaded
+                    }}
                     className="hidden"
                     id="aadharImage"
+                    required
                   />
                   <label
                     htmlFor="aadharImage"
                     className="px-4 py-2 bg-accent text-text-light rounded-button font-semibold hover:bg-accent-hover cursor-pointer inline-block"
                   >
-                    Upload Image
+                    {images.aadharImage ? 'Change Image' : 'Upload Image'}
                   </label>
+                  {!images.aadharImage && (
+                    <p className="text-sm text-danger mt-2">Required: Please upload your Aadhar card image</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -334,10 +408,12 @@ const DriverRegistrationForm = () => {
             <div>
               <label className="block text-sm font-medium text-text-primary mb-2">
                 <FaCamera className="inline mr-2 text-accent" />
-                PAN Card Image
+                PAN Card Image <span className="text-danger">*</span>
               </label>
               <div className="flex items-center space-x-4">
-                <div className="w-32 h-32 border-2 border-dashed border-border rounded-button flex items-center justify-center overflow-hidden">
+                <div className={`w-32 h-32 border-2 border-dashed rounded-button flex items-center justify-center overflow-hidden ${
+                  images.panImage ? 'border-success' : 'border-danger'
+                }`}>
                   {imagePreviews.panImage ? (
                     <img src={imagePreviews.panImage} alt="PAN" className="w-full h-full object-cover" />
                   ) : (
@@ -348,16 +424,23 @@ const DriverRegistrationForm = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => handleImageChange(e, 'panImage')}
+                    onChange={(e) => {
+                      handleImageChange(e, 'panImage')
+                      setError('') // Clear error when image is uploaded
+                    }}
                     className="hidden"
                     id="panImage"
+                    required
                   />
                   <label
                     htmlFor="panImage"
                     className="px-4 py-2 bg-accent text-text-light rounded-button font-semibold hover:bg-accent-hover cursor-pointer inline-block"
                   >
-                    Upload Image
+                    {images.panImage ? 'Change Image' : 'Upload Image'}
                   </label>
+                  {!images.panImage && (
+                    <p className="text-sm text-danger mt-2">Required: Please upload your PAN card image</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -372,8 +455,13 @@ const DriverRegistrationForm = () => {
               <div>
                 <h4 className="font-semibold text-text-primary mb-2">Personal Information</h4>
                 <p className="text-text-secondary">License: {formData.licenseNumber}</p>
-                {imagePreviews.profileImage && (
-                  <img src={imagePreviews.profileImage} alt="Profile" className="w-20 h-20 rounded-button mt-2 object-cover" />
+                {imagePreviews.profileImage ? (
+                  <div className="mt-2">
+                    <img src={imagePreviews.profileImage} alt="Profile" className="w-20 h-20 rounded-button object-cover" />
+                    <p className="text-xs text-success mt-1">✓ Profile Image uploaded</p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-danger mt-1">✗ Profile Image missing</p>
                 )}
               </div>
               <div>
@@ -381,22 +469,37 @@ const DriverRegistrationForm = () => {
                 <p className="text-text-secondary">Type: {formData.vehicleType}</p>
                 <p className="text-text-secondary">Number: {formData.vehicleNumber}</p>
                 <p className="text-text-secondary">Model: {formData.vehicleModel}</p>
-                {imagePreviews.vehicleImage && (
-                  <img src={imagePreviews.vehicleImage} alt="Vehicle" className="w-20 h-20 rounded-button mt-2 object-cover" />
+                {imagePreviews.vehicleImage ? (
+                  <div className="mt-2">
+                    <img src={imagePreviews.vehicleImage} alt="Vehicle" className="w-20 h-20 rounded-button object-cover" />
+                    <p className="text-xs text-success mt-1">✓ Vehicle Image uploaded</p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-danger mt-1">✗ Vehicle Image missing</p>
                 )}
               </div>
               <div>
                 <h4 className="font-semibold text-text-primary mb-2">Aadhar Card</h4>
                 <p className="text-text-secondary">Number: {formData.aadharNumber}</p>
-                {imagePreviews.aadharImage && (
-                  <img src={imagePreviews.aadharImage} alt="Aadhar" className="w-20 h-20 rounded-button mt-2 object-cover" />
+                {imagePreviews.aadharImage ? (
+                  <div className="mt-2">
+                    <img src={imagePreviews.aadharImage} alt="Aadhar" className="w-20 h-20 rounded-button object-cover" />
+                    <p className="text-xs text-success mt-1">✓ Aadhar Card Image uploaded</p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-danger mt-1">✗ Aadhar Card Image missing</p>
                 )}
               </div>
               <div>
                 <h4 className="font-semibold text-text-primary mb-2">PAN Card</h4>
                 <p className="text-text-secondary">Number: {formData.panNumber}</p>
-                {imagePreviews.panImage && (
-                  <img src={imagePreviews.panImage} alt="PAN" className="w-20 h-20 rounded-button mt-2 object-cover" />
+                {imagePreviews.panImage ? (
+                  <div className="mt-2">
+                    <img src={imagePreviews.panImage} alt="PAN" className="w-20 h-20 rounded-button object-cover" />
+                    <p className="text-xs text-success mt-1">✓ PAN Card Image uploaded</p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-danger mt-1">✗ PAN Card Image missing</p>
                 )}
               </div>
             </div>

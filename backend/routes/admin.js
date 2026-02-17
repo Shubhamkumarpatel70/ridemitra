@@ -504,6 +504,36 @@ router.put('/drivers/:id/vkyc/complete', async (req, res) => {
   }
 });
 
+// @route   PUT /api/admin/drivers/:id/vkyc/status
+// @desc    Set VKYC completed (checkbox) - checked = completed, unchecked = pending
+// @access  Private (Admin)
+router.put('/drivers/:id/vkyc/status', async (req, res) => {
+  try {
+    const driver = await Driver.findById(req.params.id);
+    if (!driver) {
+      return res.status(404).json({ message: 'Driver not found' });
+    }
+
+    const { completed } = req.body;
+    if (completed === true) {
+      driver.vkycStatus = 'completed';
+      driver.vkycCompletedAt = new Date();
+    } else {
+      driver.vkycStatus = 'not-scheduled';
+      driver.vkycCompletedAt = null;
+    }
+    await driver.save();
+
+    res.json({
+      message: completed ? 'VKYC marked as completed' : 'VKYC marked as pending',
+      driver
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // @route   POST /api/admin/users/:id/wallet
 // @desc    Add amount to user wallet
 // @access  Private (Admin)

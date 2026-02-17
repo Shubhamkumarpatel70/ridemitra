@@ -68,7 +68,7 @@ const Login = () => {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-text-primary">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-text-secondary">
+          <p className="mt-3 text-center text-sm text-text-secondary">
             Or{' '}
             <Link
               to="/register"
@@ -80,13 +80,13 @@ const Login = () => {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-900/30 border border-danger text-danger px-4 py-3 rounded">
+            <div className="bg-red-900/30 border border-danger text-danger px-4 py-3 rounded-button">
               {error}
             </div>
           )}
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="space-y-5">
             <div>
-              <label htmlFor="email" className="sr-only">
+              <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2">
                 Email address
               </label>
               <input
@@ -95,14 +95,14 @@ const Login = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 bg-surface border border-border placeholder-text-secondary text-text-primary rounded-t-md focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent focus:z-10 sm:text-sm"
-                placeholder="Email address"
+                className="block w-full px-4 py-3 bg-surface border border-border rounded-button placeholder-text-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm transition"
+                placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label htmlFor="password" className="block text-sm font-medium text-text-primary mb-2">
                 Password
               </label>
               <input
@@ -111,15 +111,15 @@ const Login = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 bg-surface border border-border placeholder-text-secondary text-text-primary rounded-b-md focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent focus:z-10 sm:text-sm"
-                placeholder="Password"
+                className="block w-full px-4 py-3 bg-surface border border-border rounded-button placeholder-text-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm transition"
+                placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          <div>
+          <div className="pt-1">
             <button
               type="submit"
               disabled={loading}

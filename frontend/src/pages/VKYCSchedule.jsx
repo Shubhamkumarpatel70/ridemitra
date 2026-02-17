@@ -15,6 +15,7 @@ const VKYCSchedule = () => {
   const [success, setSuccess] = useState('')
   const [showVideoCall, setShowVideoCall] = useState(false)
   const [callId, setCallId] = useState(null)
+  const [driverId, setDriverId] = useState(null)
 
   useEffect(() => {
     fetchDriverProfile()
@@ -62,12 +63,15 @@ const VKYCSchedule = () => {
       const res = await axios.post('/api/driver/vkyc/join')
       if (res.data.callId) {
         setCallId(res.data.callId)
+        setDriverId(res.data.driverId || driverProfile?._id)
         setShowVideoCall(true)
         // Refresh profile to update status
         fetchDriverProfile()
       }
     } catch (error) {
-      setError(error.response?.data?.message || 'Failed to join call')
+      const message = error.response?.data?.message || 'Failed to join call'
+      setError(message)
+      fetchDriverProfile()
     } finally {
       setLoading(false)
     }
@@ -83,7 +87,7 @@ const VKYCSchedule = () => {
   return (
     <>
       {showVideoCall && callId && (
-        <DriverVideoCall callId={callId} onClose={handleEndCall} />
+        <DriverVideoCall callId={callId} driverId={driverId || driverProfile?._id} onClose={handleEndCall} />
       )}
       <div className="min-h-screen bg-secondary">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -179,8 +183,28 @@ const VKYCSchedule = () => {
             </div>
           )}
 
+          {/* VKYC Completed Message */}
+          {driverProfile?.vkycStatus === 'completed' && (
+            <div className="bg-success/10 border border-success rounded-button p-6 mb-6">
+              <div className="flex items-center space-x-3">
+                <FaCheckCircle className="text-success text-3xl" />
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-text-primary">VKYC Completed</h3>
+                  <p className="text-text-secondary mt-2">
+                    Your VKYC verification has been completed successfully. Your account is under review and you'll be able to accept rides once approved by admin.
+                  </p>
+                  {driverProfile.vkycCompletedAt && (
+                    <p className="text-sm text-text-secondary mt-2">
+                      Completed on: {new Date(driverProfile.vkycCompletedAt).toLocaleString()}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Schedule Form */}
-          {(!driverProfile?.vkycScheduledAt || driverProfile?.vkycStatus === 'not-scheduled') && (
+          {driverProfile?.vkycStatus !== 'completed' && (!driverProfile?.vkycScheduledAt || driverProfile?.vkycStatus === 'not-scheduled') && (
             <form onSubmit={handleSchedule} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-text-primary mb-2">

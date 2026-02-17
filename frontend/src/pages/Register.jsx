@@ -71,7 +71,7 @@ const Register = () => {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-text-primary">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-sm text-text-secondary">
+          <p className="mt-3 text-center text-sm text-text-secondary">
             Or{' '}
             <Link
               to="/login"
@@ -83,13 +83,13 @@ const Register = () => {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-900/30 border border-danger text-danger px-4 py-3 rounded">
+            <div className="bg-red-900/30 border border-danger text-danger px-4 py-3 rounded-button">
               {error}
             </div>
           )}
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-text-primary">
+              <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2">
                 Full Name
               </label>
               <input
@@ -97,44 +97,44 @@ const Register = () => {
                 name="name"
                 type="text"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 bg-surface border border-border placeholder-text-secondary text-text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent sm:text-sm"
+                className="block w-full px-4 py-3 bg-surface border border-border rounded-button placeholder-text-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm transition"
                 placeholder="John Doe"
                 value={formData.name}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-text-primary">
-                Email
+              <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2">
+                Email address
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 bg-primary border border-accent/20 placeholder-text-secondary text-text-primary placeholder-text-secondary text-text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent sm:text-sm"
+                className="block w-full px-4 py-3 bg-surface border border-border rounded-button placeholder-text-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm transition"
                 placeholder="john@example.com"
                 value={formData.email}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-text-primary">
-                Phone
+              <label htmlFor="phone" className="block text-sm font-medium text-text-primary mb-2">
+                Phone number
               </label>
               <input
                 id="phone"
                 name="phone"
                 type="tel"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 bg-primary border border-accent/20 placeholder-text-secondary text-text-primary placeholder-text-secondary text-text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent sm:text-sm"
+                className="block w-full px-4 py-3 bg-surface border border-border rounded-button placeholder-text-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm transition"
                 placeholder="+91 1234567890"
                 value={formData.phone}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-text-primary">
+              <label htmlFor="password" className="block text-sm font-medium text-text-primary mb-2">
                 Password
               </label>
               <input
@@ -143,20 +143,20 @@ const Register = () => {
                 type="password"
                 required
                 minLength={6}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 bg-primary border border-accent/20 placeholder-text-secondary text-text-primary placeholder-text-secondary text-text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent sm:text-sm"
+                className="block w-full px-4 py-3 bg-surface border border-border rounded-button placeholder-text-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm transition"
                 placeholder="Minimum 6 characters"
                 value={formData.password}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-text-primary">
+              <label htmlFor="role" className="block text-sm font-medium text-text-primary mb-2">
                 I want to
               </label>
               <select
                 id="role"
                 name="role"
-                className="mt-1 block w-full px-3 py-2 bg-surface border border-border text-text-primary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent sm:text-sm"
+                className="block w-full px-4 py-3 bg-surface border border-border text-text-primary rounded-button focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm transition"
                 value={formData.role}
                 onChange={handleChange}
               >
@@ -165,16 +165,16 @@ const Register = () => {
               </select>
             </div>
             {formData.role === 'driver' && (
-              <div className="bg-warning/10 border border-warning rounded-button p-4">
+              <div className="bg-warning/10 border border-warning rounded-button p-4 mt-1">
                 <p className="text-sm text-text-secondary">
-                  <strong className="text-accent">Note:</strong> After registration, your account will be reviewed by admin. 
-                  Once approved, you'll be able to add your vehicle details and start accepting rides.
+                  <strong className="text-accent">Note:</strong> After registration, your account will be reviewed by admin.
+                  Once approved, you&apos;ll be able to add your vehicle details and start accepting rides.
                 </p>
               </div>
             )}
           </div>
 
-          <div>
+          <div className="pt-1">
               <button
               type="submit"
               disabled={loading}

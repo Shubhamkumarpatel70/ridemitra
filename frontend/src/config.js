@@ -3,3 +3,6 @@ export const API_URL = import.meta.env.VITE_API_URL !== undefined
   ? import.meta.env.VITE_API_URL
   : (import.meta.env.DEV ? 'http://localhost:5000' : '');
 
+// Socket.io URL: same origin as API
+export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || (import.meta.env.DEV ? 'http://localhost:5000' : '');
+

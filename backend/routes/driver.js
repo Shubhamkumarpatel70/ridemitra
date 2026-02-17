@@ -589,12 +589,14 @@ router.post('/vkyc/join', auth, isDriver, async (req, res) => {
       return res.status(404).json({ message: 'Driver profile not found' });
     }
 
-    if (driver.vkycStatus !== 'scheduled') {
-      return res.status(400).json({ message: 'No scheduled VKYC call found' });
+    if (driver.vkycStatus !== 'scheduled' && driver.vkycStatus !== 'in-progress') {
+      return res.status(400).json({ message: 'No scheduled VKYC call found. Please schedule a call first.' });
     }
 
-    driver.vkycStatus = 'in-progress';
-    await driver.save();
+    if (driver.vkycStatus === 'scheduled') {
+      driver.vkycStatus = 'in-progress';
+      await driver.save();
+    }
 
     // Generate a call ID (in production, use WebRTC signaling server)
     const callId = `vkyc-${driver._id}-${Date.now()}`;

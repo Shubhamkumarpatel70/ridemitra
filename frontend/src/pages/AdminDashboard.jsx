@@ -371,6 +371,15 @@ const AdminDashboard = () => {
     }
   }
 
+  const handleVkycCompletedToggle = async (driverId, completed) => {
+    try {
+      await axios.put(`/api/admin/drivers/${driverId}/vkyc/status`, { completed })
+      await fetchDrivers()
+    } catch (error) {
+      alert(error.response?.data?.message || 'Failed to update VKYC status')
+    }
+  }
+
   const handleUpdateAccountDetails = async (driverId) => {
     if (!accountDetailsForm.accountNumber || !accountDetailsForm.ifscCode || !accountDetailsForm.accountHolderName) {
       alert('Please fill all fields')
@@ -1146,6 +1155,16 @@ const AdminDashboard = () => {
                             <FaTrash className="inline mr-2" />
                             Delete
                           </button>
+                          <label className="flex items-center gap-2 px-4 py-2 bg-secondary border border-border rounded-button cursor-pointer hover:bg-secondary/80 transition shrink-0">
+                            <input
+                              type="checkbox"
+                              checked={driver.vkycStatus === 'completed'}
+                              onChange={(e) => handleVkycCompletedToggle(driver._id, e.target.checked)}
+                              disabled={loading}
+                              className="w-4 h-4 rounded border-border text-accent focus:ring-accent focus:ring-offset-0"
+                            />
+                            <span className="text-sm font-medium text-text-primary whitespace-nowrap">VKYC Completed</span>
+                          </label>
                           <button
                             onClick={() => handleStartVKYC(driver._id, driver.userId?.name)}
                             disabled={loading || !driver.vkycScheduledAt || (driver.vkycStatus !== 'scheduled' && driver.vkycStatus !== 'in-progress')}

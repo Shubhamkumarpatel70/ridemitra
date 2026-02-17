@@ -629,13 +629,20 @@ const DriverDashboard = () => {
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-text-primary">Your Details Are Being Verified</h3>
                 <p className="text-text-secondary mb-4">Your driver account is under review. You'll be able to accept rides once approved by admin.</p>
-                <button
-                  onClick={() => navigate('/driver/vkyc-schedule')}
-                  className="bg-accent text-text-light px-6 py-2 rounded-button font-semibold hover:bg-accent-hover transition flex items-center"
-                >
-                  <FaVideo className="mr-2" />
-                  Schedule VKYC Call
-                </button>
+                {driverProfile.vkycStatus === 'completed' ? (
+                  <div className="bg-success/10 border border-success text-success px-6 py-2 rounded-button font-semibold inline-flex items-center">
+                    <FaCheckCircle className="mr-2" />
+                    VKYC Completed
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => navigate('/driver/vkyc-schedule')}
+                    className="bg-accent text-text-light px-6 py-2 rounded-button font-semibold hover:bg-accent-hover transition flex items-center"
+                  >
+                    <FaVideo className="mr-2" />
+                    Schedule VKYC Call
+                  </button>
+                )}
               </div>
             </div>
           </div>
