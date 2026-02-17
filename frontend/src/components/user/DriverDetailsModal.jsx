@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { FaTimes, FaStar, FaCar, FaUser, FaCheckCircle } from 'react-icons/fa'
+import { API_URL } from '../../config'
 
 const DriverDetailsModal = ({ driverId, isOpen, onClose }) => {
   const [driverDetails, setDriverDetails] = useState(null)
@@ -70,7 +71,7 @@ const DriverDetailsModal = ({ driverId, isOpen, onClose }) => {
             <div className="flex items-center space-x-4 pb-4 border-b border-border">
               {driverDetails.profileImage ? (
                 <img 
-                  src={`http://localhost:5000${driverDetails.profileImage}`} 
+                  src={`${API_URL}${driverDetails.profileImage}`} 
                   alt="Driver" 
                   className="w-20 h-20 rounded-full object-cover border-2 border-accent"
                 />

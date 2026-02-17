@@ -1,10 +1,19 @@
+# Render Blueprint: single web service (frontend + backend)
+# Docs: https://render.com/docs/blueprint-spec
+
 services:
   - type: web
-    name: ride-mitra-frontend
-    env: static
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
-    envVars:
-      - key: VITE_API_URL
-        value: https://ride-mitra-backend.onrender.com
+    name: ride-mitra
+    runtime: node
 
+    # Build: install frontend deps, build frontend, install backend deps
+    buildCommand: npm run build
+    startCommand: npm start
+
+    # Env: set MONGODB_URI in Render dashboard (or here with sync: false for secrets)
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Empty = same-origin; frontend and API served from one host
+      - key: VITE_API_URL
+        value: ""

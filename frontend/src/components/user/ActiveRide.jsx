@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { FaMapMarkerAlt, FaUser, FaCar, FaClock, FaKey, FaInfoCircle, FaTimes } from 'react-icons/fa'
+import { API_URL } from '../../config'
 import DriverDetailsModal from './DriverDetailsModal'
 
 const ActiveRide = ({ ride, onUpdate }) => {
@@ -144,7 +145,7 @@ const ActiveRide = ({ ride, onUpdate }) => {
               <div className="flex items-center space-x-4 mb-4">
                 {ride.driverId.profileImage ? (
                   <img 
-                    src={`http://localhost:5000${ride.driverId.profileImage}`} 
+                    src={`${API_URL}${ride.driverId.profileImage}`} 
                     alt="Driver" 
                     onClick={() => setShowDriverModal(true)}
                     className="w-16 h-16 rounded-full object-cover border-2 border-accent cursor-pointer hover:opacity-80 transition"
